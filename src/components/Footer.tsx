@@ -85,7 +85,7 @@ const Footer = () => {
             <div className="flex flex-col gap-4">
               <Link to="/" className="flex items-center shrink-0 group">
                 <img 
-                  src="/images/logo.jpg" 
+                  src="/images/logo.svg" 
                   alt="Devansh Singhal & Company - Chartered Accountants" 
                   className="h-12 w-auto object-contain rounded-sm bg-white p-1 shadow-sm"
                 />
