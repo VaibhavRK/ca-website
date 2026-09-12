@@ -16,7 +16,7 @@ const Navbar = () => {
   }, [location.pathname]);
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `relative py-6 text-[13px] uppercase tracking-widest font-semibold transition-colors hover:text-accent ${
+    `relative py-7 text-[13px] uppercase tracking-widest font-semibold transition-colors hover:text-accent ${
       isActive
         ? "text-accent after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent after:origin-left after:scale-x-100 after:transition-transform after:duration-300"
         : "text-[#1F2937] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300"
@@ -30,23 +30,23 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-40 w-full bg-white border-b border-border shadow-sm">
       <div className="h-0.5 w-full bg-accent" />
-      <div className="section-container flex items-center justify-between h-[72px] w-full max-w-[1280px] mx-auto">
+      <div className="section-container flex items-center justify-between min-h-[88px] py-3.5 md:py-4 w-full max-w-[1340px] mx-auto">
         {/* Logo */}
         <Link
           to="/"
-          className="flex flex-col items-center justify-center w-auto flex-shrink-0"
+          className="flex flex-col items-center justify-center w-auto flex-shrink-0 py-1 hover:opacity-95 transition-opacity"
         >
           <span className="font-heading text-2xl md:text-3xl text-primary font-bold leading-tight">
             Devansh Singhal
           </span>
           <div className="flex items-center w-full my-0.5">
             <div className="flex-grow h-px bg-accent"></div>
-            <span className="font-heading text-sm md:text-base text-primary px-2">
+            <span className="font-heading text-xs md:text-sm text-primary px-2 font-medium tracking-wide">
               & Company
             </span>
             <div className="flex-grow h-px bg-accent"></div>
           </div>
-          <span className="text-[0.6rem] md:text-xs text-text-secondary tracking-[0.25em] uppercase font-semibold">
+          <span className="text-[0.625rem] md:text-[0.7rem] text-text-secondary tracking-[0.28em] uppercase font-semibold mt-0.5">
             Chartered Accountants
           </span>
         </Link>
@@ -61,12 +61,12 @@ const Navbar = () => {
           </NavLink>
 
           {/* Services Dropdown */}
-          <div className="relative group h-[72px] flex items-center">
-            <button className="flex items-center gap-1 py-6 text-[13px] uppercase tracking-widest font-semibold text-[#1F2937] group-hover:text-accent transition-colors">
+          <div className="relative group h-[88px] flex items-center">
+            <button className="flex items-center gap-1 py-7 text-[13px] uppercase tracking-widest font-semibold text-[#1F2937] group-hover:text-accent transition-colors">
               Services{" "}
               <ChevronDown className="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" />
             </button>
-            <div className="absolute top-[72px] left-0 w-[280px] z-50 opacity-0 -translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ease-out shadow-lg">
+            <div className="absolute top-[88px] left-0 w-[280px] z-50 opacity-0 -translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ease-out shadow-lg">
               <div className="h-0.5 w-full bg-accent" />
               <div className="bg-white border border-t-0 border-border flex flex-col">
                 {services.map((service) => (
@@ -88,12 +88,12 @@ const Navbar = () => {
           </NavLink>
 
           {/* Knowledge Dropdown */}
-          <div className="relative group h-[72px] flex items-center">
-            <button className="flex items-center gap-1 py-6 text-[13px] uppercase tracking-widest font-semibold text-[#1F2937] group-hover:text-accent transition-colors">
+          <div className="relative group h-[88px] flex items-center">
+            <button className="flex items-center gap-1 py-7 text-[13px] uppercase tracking-widest font-semibold text-[#1F2937] group-hover:text-accent transition-colors">
               Knowledge{" "}
               <ChevronDown className="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" />
             </button>
-            <div className="absolute top-[72px] left-0 w-[200px] z-50 opacity-0 -translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ease-out shadow-lg">
+            <div className="absolute top-[88px] left-0 w-[200px] z-50 opacity-0 -translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ease-out shadow-lg">
               <div className="h-0.5 w-full bg-accent" />
               <div className="bg-white border border-t-0 border-border flex flex-col">
                 <Link
