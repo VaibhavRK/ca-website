@@ -83,18 +83,12 @@ const Footer = () => {
 
             {/* Col 1 — Brand + Social */}
             <div className="flex flex-col gap-4">
-              <Link to="/" className="flex flex-col w-fit group">
-                <span className="font-heading text-[20px] text-white font-bold leading-tight tracking-tight group-hover:text-accent/90 transition-colors duration-200">
-                  Devansh Singhal
-                </span>
-                <div className="flex items-center w-full my-[3px]">
-                  <div className="flex-grow h-px bg-accent/60" />
-                  <span className="font-heading text-[11px] text-white/70 px-2">&amp; Company</span>
-                  <div className="flex-grow h-px bg-accent/60" />
-                </div>
-                <span className="text-[8.5px] text-white/45 tracking-[0.25em] uppercase font-semibold">
-                  Chartered Accountants
-                </span>
+              <Link to="/" className="flex items-center shrink-0 group">
+                <img 
+                  src="/images/logo.jpg" 
+                  alt="Devansh Singhal & Company - Chartered Accountants" 
+                  className="h-12 w-auto object-contain rounded-sm bg-white p-1 shadow-sm"
+                />
               </Link>
 
               <p className="text-[#8B9DB6] text-[13.5px] leading-[1.75] max-w-[240px]">

@@ -34,21 +34,13 @@ const Navbar = () => {
         {/* Logo */}
         <Link
           to="/"
-          className="flex flex-col items-center justify-center w-auto flex-shrink-0 py-1 hover:opacity-95 transition-opacity"
+          className="flex items-center justify-center shrink-0 py-1 hover:opacity-95 transition-opacity"
         >
-          <span className="font-heading text-2xl md:text-3xl text-primary font-bold leading-tight">
-            Devansh Singhal
-          </span>
-          <div className="flex items-center w-full my-0.5">
-            <div className="flex-grow h-px bg-accent"></div>
-            <span className="font-heading text-xs md:text-sm text-primary px-2 font-medium tracking-wide">
-              & Company
-            </span>
-            <div className="flex-grow h-px bg-accent"></div>
-          </div>
-          <span className="text-[0.625rem] md:text-[0.7rem] text-text-secondary tracking-[0.28em] uppercase font-semibold mt-0.5">
-            Chartered Accountants
-          </span>
+          <img 
+            src="/images/logo.jpg" 
+            alt="Devansh Singhal & Company - Chartered Accountants" 
+            className="h-12 md:h-14 w-auto object-contain"
+          />
         </Link>
 
         {/* Desktop Nav */}
