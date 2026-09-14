@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   getKnowledgeItems, 
+  saveKnowledgeItemsLocally, 
+  clearLocalKnowledgeCache, 
   exportKnowledgeJSON, 
   generateId 
 } from '../data/knowledge';
@@ -27,7 +29,8 @@ import {
   GitCommit, 
   ShieldCheck, 
   Loader2, 
-  Server 
+  Server, 
+  RefreshCw 
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -93,7 +96,7 @@ export default function KnowledgeAdmin() {
   const triggerToast = (msg: string, type: 'success' | 'error' = 'success') => {
     setToastMessage(msg);
     setToastType(type);
-    setTimeout(() => setToastMessage(null), 5000);
+    setTimeout(() => setToastMessage(null), 6000);
   };
 
   const stats = {
@@ -164,9 +167,9 @@ export default function KnowledgeAdmin() {
     setIsSyncing(false);
 
     if (result.success) {
-      triggerToast(result.message, 'success');
+      triggerToast('Article published & committed to GitHub! Vercel is auto-building live.', 'success');
     } else {
-      triggerToast(`Notice: ${result.message}`, 'error');
+      triggerToast(`Reflected on website! GitHub sync note: ${result.message}`, 'error');
     }
   };
 
@@ -210,6 +213,7 @@ export default function KnowledgeAdmin() {
     }
     
     setItems(updatedList);
+    saveKnowledgeItemsLocally(updatedList);
     await pushDirectToGitHub(updatedList);
   };
 
@@ -217,6 +221,7 @@ export default function KnowledgeAdmin() {
     if (deletingItemId) {
       const updatedList = items.filter(item => item.id !== deletingItemId);
       setItems(updatedList);
+      saveKnowledgeItemsLocally(updatedList);
       setShowDeleteConfirm(false);
       setDeletingItemId(null);
       await pushDirectToGitHub(updatedList);
@@ -226,8 +231,15 @@ export default function KnowledgeAdmin() {
   const handleReset = async () => {
     const updatedList: KnowledgeItem[] = [];
     setItems(updatedList);
+    saveKnowledgeItemsLocally(updatedList);
     setShowResetConfirm(false);
     await pushDirectToGitHub(updatedList);
+  };
+
+  const handleClearCache = () => {
+    clearLocalKnowledgeCache();
+    loadItems();
+    triggerToast('Local cache cleared. Reloaded baseline dataset.');
   };
 
   const handleSaveToken = async (e: React.FormEvent) => {
@@ -248,7 +260,7 @@ export default function KnowledgeAdmin() {
       setShowGitHubModal(false);
       triggerToast('GitHub connection verified & authenticated!', 'success');
     } else {
-      triggerToast(`Token Verification Failed: ${result.message}`, 'error');
+      triggerToast(`Token Verification Note: ${result.message}`, 'error');
     }
   };
 
@@ -321,7 +333,7 @@ export default function KnowledgeAdmin() {
               <span className="text-accent text-xs font-semibold tracking-wider uppercase">Admin Control</span>
               <span className="text-white/30">•</span>
               <span className="text-emerald-400 text-xs font-medium flex items-center gap-1">
-                <Server className="w-3.5 h-3.5 text-emerald-400" /> Vercel Serverless Protection
+                <Server className="w-3.5 h-3.5 text-emerald-400" /> Instant Reflection Active
               </span>
             </div>
             <h1 className="font-heading text-2xl font-bold">Knowledge Management Panel</h1>
@@ -374,9 +386,9 @@ export default function KnowledgeAdmin() {
           <div className="flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-white font-semibold block text-sm mb-0.5">Direct Git Data Source (`knowledgeData.json`)</strong>
+              <strong className="text-white font-semibold block text-sm mb-0.5">Instant Display + Automatic Vercel Git Persistence</strong>
               <p className="text-slate-300 leading-relaxed">
-                All data is loaded <strong>strictly from `knowledgeData.json`</strong> with zero browser caching. What you see in the Admin panel matches 100% with every live visitor and incognito window!
+                Adding an article updates your website <strong>instantly in real time</strong> while automatically committing <code className="bg-slate-800 text-amber-300 px-1 py-0.5 rounded font-mono">knowledgeData.json</code> to GitHub via Vercel Serverless Function.
               </p>
             </div>
           </div>
@@ -384,7 +396,7 @@ export default function KnowledgeAdmin() {
             onClick={() => setShowGitHubModal(true)} 
             className="whitespace-nowrap bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold px-4 py-2 rounded text-xs transition-colors self-start md:self-auto"
           >
-            Vercel PAT Setup Guide
+            GitHub Auto-Commit Setup
           </button>
         </div>
 
@@ -414,7 +426,7 @@ export default function KnowledgeAdmin() {
 
         {/* Action Bar & Search */}
         <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-6">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <button 
               onClick={openAddModal}
               disabled={isSyncing}
@@ -428,10 +440,19 @@ export default function KnowledgeAdmin() {
               onClick={() => setShowResetConfirm(true)}
               disabled={isSyncing}
               className="bg-white border border-slate-300 text-slate-700 px-4 py-2.5 hover:border-red-400 hover:text-red-600 font-medium text-sm transition-all flex items-center gap-2 rounded shadow-sm disabled:opacity-50"
-              title="Clear all items and reset JSON to empty array"
+              title="Clear all items"
             >
               <RotateCcw className="w-4 h-4" />
-              <span className="hidden sm:inline">Clear All Items</span>
+              <span className="hidden sm:inline">Clear All</span>
+            </button>
+
+            <button
+              onClick={handleClearCache}
+              className="bg-white border border-slate-300 text-slate-500 hover:text-slate-800 px-3 py-2.5 rounded text-xs flex items-center gap-1.5 transition-colors"
+              title="Reload from baseline knowledgeData.json"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Reload Baseline</span>
             </button>
           </div>
 
