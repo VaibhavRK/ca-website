@@ -1,6 +1,4 @@
 import { useEffect } from 'react';
-import { Shield, Award, Users, Lightbulb, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import PageHero from '../components/PageHero';
 import LeadershipCard from '../components/LeadershipCard';
 import { leadershipMembers } from '../data/leadership';

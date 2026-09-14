@@ -1,16 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  Target, 
-  Eye, 
-  ShieldCheck, 
-  Award, 
-  Users, 
-  Lightbulb, 
-  Handshake, 
-  Scale,
-  ArrowRight
-} from 'lucide-react';
+import { Target, Eye } from 'lucide-react';
 import PageHero from '../components/PageHero';
 
 const About: React.FC = () => {

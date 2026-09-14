@@ -2,21 +2,11 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import HeroCarousel from '../components/HeroCarousel';
-import SectionHeader from '../components/SectionHeader';
-import ServiceCard from '../components/ServiceCard';
-import LeadershipCard from '../components/LeadershipCard';
-import KnowledgeCard from '../components/KnowledgeCard';
-import { services } from '../data/services';
-import { leadershipMembers } from '../data/leadership';
-import { getLatestKnowledge } from '../data/knowledge';
 
 const Home: React.FC = () => {
   useEffect(() => {
     document.title = 'Devansh Singhal & Company | Chartered Accountants';
   }, []);
-
-  const latestKnowledge = getLatestKnowledge(3);
-  const topLeadership = leadershipMembers.slice(0, 3);
 
   return (
     <div className="w-full overflow-hidden">

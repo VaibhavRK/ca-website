@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageHero from '../components/PageHero';
-import { MapPin, Phone, Mail, Clock, ArrowRight, CheckCircle } from 'lucide-react';
+import { MapPin, Phone, Mail, ArrowRight, CheckCircle } from 'lucide-react';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
