@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
   getKnowledgeItems, 
-  addKnowledgeItem, 
-  updateKnowledgeItem, 
-  deleteKnowledgeItem, 
-  resetKnowledgeToDefaults, 
   exportKnowledgeJSON, 
   generateId 
 } from '../data/knowledge';
@@ -170,7 +166,7 @@ export default function KnowledgeAdmin() {
     if (result.success) {
       triggerToast(result.message, 'success');
     } else {
-      triggerToast(`Saved in browser! Auto-Commit Note: ${result.message}`, 'error');
+      triggerToast(`Notice: ${result.message}`, 'error');
     }
   };
 
@@ -179,20 +175,26 @@ export default function KnowledgeAdmin() {
     let updatedList: KnowledgeItem[] = [];
     
     if (showEditModal && editingItem) {
-      updateKnowledgeItem(editingItem.id, {
-        title: formData.title,
-        category: formData.category,
-        date: formData.date,
-        description: formData.description,
-        pdfUrl: formData.pdfUrl || undefined,
-        content: formData.content || undefined,
-        author: formData.author || undefined,
-        readTime: formData.readTime || undefined
+      updatedList = items.map(item => {
+        if (item.id === editingItem.id) {
+          return {
+            ...item,
+            title: formData.title,
+            category: formData.category,
+            date: formData.date,
+            description: formData.description,
+            pdfUrl: formData.pdfUrl || undefined,
+            content: formData.content || undefined,
+            author: formData.author || undefined,
+            readTime: formData.readTime || undefined
+          };
+        }
+        return item;
       });
       setShowEditModal(false);
       setEditingItem(null);
     } else {
-      addKnowledgeItem({
+      const newItem: KnowledgeItem = {
         id: generateId(),
         title: formData.title,
         category: formData.category,
@@ -202,32 +204,29 @@ export default function KnowledgeAdmin() {
         content: formData.content || undefined,
         author: formData.author || undefined,
         readTime: formData.readTime || undefined
-      });
+      };
+      updatedList = [newItem, ...items];
       setShowAddModal(false);
     }
     
-    updatedList = getKnowledgeItems();
     setItems(updatedList);
-
     await pushDirectToGitHub(updatedList);
   };
 
   const handleDelete = async () => {
     if (deletingItemId) {
-      deleteKnowledgeItem(deletingItemId);
+      const updatedList = items.filter(item => item.id !== deletingItemId);
+      setItems(updatedList);
       setShowDeleteConfirm(false);
       setDeletingItemId(null);
-      const updatedList = getKnowledgeItems();
-      setItems(updatedList);
       await pushDirectToGitHub(updatedList);
     }
   };
 
   const handleReset = async () => {
-    resetKnowledgeToDefaults();
-    setShowResetConfirm(false);
-    const updatedList = getKnowledgeItems();
+    const updatedList: KnowledgeItem[] = [];
     setItems(updatedList);
+    setShowResetConfirm(false);
     await pushDirectToGitHub(updatedList);
   };
 
@@ -254,7 +253,7 @@ export default function KnowledgeAdmin() {
   };
 
   const handleExportJSON = () => {
-    const jsonString = exportKnowledgeJSON();
+    const jsonString = exportKnowledgeJSON(items);
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -268,7 +267,7 @@ export default function KnowledgeAdmin() {
   };
 
   const handleCopyJSON = () => {
-    const jsonString = exportKnowledgeJSON();
+    const jsonString = exportKnowledgeJSON(items);
     navigator.clipboard.writeText(jsonString).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
@@ -375,9 +374,9 @@ export default function KnowledgeAdmin() {
           <div className="flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-white font-semibold block text-sm mb-0.5">Vercel Environment Variable Protection (`GITHUB_PAT`)</strong>
+              <strong className="text-white font-semibold block text-sm mb-0.5">Direct Git Data Source (`knowledgeData.json`)</strong>
               <p className="text-slate-300 leading-relaxed">
-                By setting <code className="bg-slate-800 text-amber-300 px-1 py-0.5 rounded font-mono">GITHUB_PAT</code> in Vercel Dashboard, Vercel Serverless Function <code className="bg-slate-800 text-slate-200 px-1 py-0.5 rounded font-mono">/api/commit-knowledge</code> commits changes directly from Vercel backend. <strong>Zero credentials exist on client browsers or GitHub code!</strong>
+                All data is loaded <strong>strictly from `knowledgeData.json`</strong> with zero browser caching. What you see in the Admin panel matches 100% with every live visitor and incognito window!
               </p>
             </div>
           </div>
@@ -429,10 +428,10 @@ export default function KnowledgeAdmin() {
               onClick={() => setShowResetConfirm(true)}
               disabled={isSyncing}
               className="bg-white border border-slate-300 text-slate-700 px-4 py-2.5 hover:border-red-400 hover:text-red-600 font-medium text-sm transition-all flex items-center gap-2 rounded shadow-sm disabled:opacity-50"
-              title="Reset to default seed file data"
+              title="Clear all items and reset JSON to empty array"
             >
               <RotateCcw className="w-4 h-4" />
-              <span className="hidden sm:inline">Reset Defaults</span>
+              <span className="hidden sm:inline">Clear All Items</span>
             </button>
           </div>
 
@@ -786,9 +785,9 @@ export default function KnowledgeAdmin() {
             <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4">
               <RotateCcw className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">Reset to Default Data?</h3>
+            <h3 className="text-lg font-bold text-slate-900 mb-2">Clear All Items?</h3>
             <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-              This will restore the original dataset from <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-800">knowledgeData.json</code>.
+              This will clear all items and set <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-800">knowledgeData.json</code> to an empty dataset <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-800">[]</code>.
             </p>
             
             <div className="flex justify-center gap-3">
@@ -804,7 +803,7 @@ export default function KnowledgeAdmin() {
                 className="px-5 py-2 bg-amber-600 text-white text-sm font-semibold rounded hover:bg-amber-700 transition-colors flex items-center gap-2 disabled:opacity-50"
               >
                 {isSyncing && <Loader2 className="w-4 h-4 animate-spin" />}
-                <span>Reset Defaults</span>
+                <span>Clear All</span>
               </button>
             </div>
           </div>
