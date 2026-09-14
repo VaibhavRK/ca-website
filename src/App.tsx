@@ -19,8 +19,9 @@ function App() {
     <>
       <ScrollToTop />
       <Routes>
-        {/* Admin route — no Navbar/Footer */}
+        {/* Admin routes — no Navbar/Footer */}
         <Route path="/manage/knowledge-panel" element={<KnowledgeAdmin />} />
+        <Route path="/admin/knowledge" element={<KnowledgeAdmin />} />
 
         {/* Public routes with layout */}
         <Route
