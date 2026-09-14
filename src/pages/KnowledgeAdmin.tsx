@@ -30,9 +30,8 @@ import {
   Search, 
   GitCommit, 
   ShieldCheck, 
-  Key, 
-  Lock, 
-  Loader2 
+  Loader2, 
+  Server 
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -98,7 +97,7 @@ export default function KnowledgeAdmin() {
   const triggerToast = (msg: string, type: 'success' | 'error' = 'success') => {
     setToastMessage(msg);
     setToastType(type);
-    setTimeout(() => setToastMessage(null), 4500);
+    setTimeout(() => setToastMessage(null), 5000);
   };
 
   const stats = {
@@ -162,22 +161,16 @@ export default function KnowledgeAdmin() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Push direct commit to GitHub repository
+  // Auto Commit Handler
   const pushDirectToGitHub = async (updatedItems: KnowledgeItem[]) => {
-    const token = gitHubToken || getGitHubToken();
-    if (!token) {
-      triggerToast('Local changes saved! To auto-commit to GitHub, click "GitHub Auto-Sync Setup".', 'success');
-      return;
-    }
-
     setIsSyncing(true);
-    const result = await commitKnowledgeToGitHub(updatedItems, token);
+    const result = await commitKnowledgeToGitHub(updatedItems, gitHubToken || undefined);
     setIsSyncing(false);
 
     if (result.success) {
       triggerToast(result.message, 'success');
     } else {
-      triggerToast(`Saved locally! GitHub Sync: ${result.message}`, 'error');
+      triggerToast(`Saved in browser! Auto-Commit Note: ${result.message}`, 'error');
     }
   };
 
@@ -216,7 +209,6 @@ export default function KnowledgeAdmin() {
     updatedList = getKnowledgeItems();
     setItems(updatedList);
 
-    // Auto push commit if GitHub Token is active in session
     await pushDirectToGitHub(updatedList);
   };
 
@@ -244,7 +236,7 @@ export default function KnowledgeAdmin() {
     if (!gitHubToken.trim()) {
       clearGitHubToken();
       setShowGitHubModal(false);
-      triggerToast('GitHub session token cleared.');
+      triggerToast('Session PAT cleared.');
       return;
     }
 
@@ -255,9 +247,9 @@ export default function KnowledgeAdmin() {
 
     if (result.success) {
       setShowGitHubModal(false);
-      triggerToast('GitHub Token authenticated! Direct Auto-Commit is now ACTIVE for this session.', 'success');
+      triggerToast('GitHub connection verified & authenticated!', 'success');
     } else {
-      triggerToast(`Token Test Failed: ${result.message}`, 'error');
+      triggerToast(`Token Verification Failed: ${result.message}`, 'error');
     }
   };
 
@@ -272,7 +264,7 @@ export default function KnowledgeAdmin() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    triggerToast('Downloaded knowledgeData.json for repository commit!');
+    triggerToast('Downloaded knowledgeData.json for manual Git commit!');
   };
 
   const handleCopyJSON = () => {
@@ -308,17 +300,17 @@ export default function KnowledgeAdmin() {
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className={`fixed top-5 right-5 z-50 px-5 py-3 rounded shadow-xl flex items-center gap-3 border text-sm font-medium animate-fade-in ${
+        <div className={`fixed top-5 right-5 z-50 max-w-md px-5 py-3.5 rounded shadow-2xl flex items-center gap-3 border text-sm font-medium animate-fade-in ${
           toastType === 'success' 
             ? 'bg-[#0B1120] text-white border-emerald-500/50' 
-            : 'bg-red-900 text-white border-red-500'
+            : 'bg-slate-900 text-white border-amber-500/60'
         }`}>
           {toastType === 'success' ? (
             <Check className="w-4 h-4 text-emerald-400 shrink-0" />
           ) : (
-            <X className="w-4 h-4 text-red-300 shrink-0" />
+            <Server className="w-4 h-4 text-amber-400 shrink-0" />
           )}
-          <span>{toastMessage}</span>
+          <span className="leading-snug">{toastMessage}</span>
         </div>
       )}
 
@@ -330,7 +322,7 @@ export default function KnowledgeAdmin() {
               <span className="text-accent text-xs font-semibold tracking-wider uppercase">Admin Control</span>
               <span className="text-white/30">•</span>
               <span className="text-emerald-400 text-xs font-medium flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" /> Secure Session Auth
+                <Server className="w-3.5 h-3.5 text-emerald-400" /> Vercel Serverless Protection
               </span>
             </div>
             <h1 className="font-heading text-2xl font-bold">Knowledge Management Panel</h1>
@@ -339,15 +331,11 @@ export default function KnowledgeAdmin() {
           <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={() => setShowGitHubModal(true)}
-              className={`px-3.5 py-2 text-xs font-semibold rounded flex items-center gap-2 transition-all border ${
-                getGitHubToken() 
-                  ? 'bg-emerald-950/80 text-emerald-300 border-emerald-600/60 hover:bg-emerald-900' 
-                  : 'bg-accent/20 text-accent border-accent/40 hover:bg-accent/30'
-              }`}
-              title="Configure GitHub Token for direct auto-commits"
+              className="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-600/60 px-3.5 py-2 text-xs font-semibold rounded flex items-center gap-2 transition-all shadow-sm"
+              title="Vercel Serverless Auto-Commit Setup"
             >
-              <GitCommit className="w-4 h-4" />
-              <span>{getGitHubToken() ? 'GitHub Direct Auto-Commit: ON' : 'Setup GitHub Auto-Commit'}</span>
+              <GitCommit className="w-4 h-4 text-emerald-400" />
+              <span>Vercel Auto-Commit Setup</span>
             </button>
 
             <button
@@ -382,23 +370,22 @@ export default function KnowledgeAdmin() {
       {/* Main Content */}
       <main className="py-8 section-container">
         
-        {/* Security / Info Banner */}
+        {/* Security Banner */}
         <div className="bg-slate-900 text-slate-200 p-4 rounded-md mb-8 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
           <div className="flex items-start gap-3">
-            <Lock className="w-5 h-5 text-accent shrink-0 mt-0.5" />
+            <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-white font-semibold block text-sm mb-0.5">100% Zero-Trust Security Architecture</strong>
+              <strong className="text-white font-semibold block text-sm mb-0.5">Vercel Environment Variable Protection (`GITHUB_PAT`)</strong>
               <p className="text-slate-300 leading-relaxed">
-                Credentials are <strong>never stored in repository source code or environment variables</strong>. 
-                Your GitHub token remains exclusively in temporary browser memory (`sessionStorage`) during your session and is erased when you close your tab.
+                By setting <code className="bg-slate-800 text-amber-300 px-1 py-0.5 rounded font-mono">GITHUB_PAT</code> in Vercel Dashboard, Vercel Serverless Function <code className="bg-slate-800 text-slate-200 px-1 py-0.5 rounded font-mono">/api/commit-knowledge</code> commits changes directly from Vercel backend. <strong>Zero credentials exist on client browsers or GitHub code!</strong>
               </p>
             </div>
           </div>
           <button 
             onClick={() => setShowGitHubModal(true)} 
-            className="whitespace-nowrap bg-accent hover:bg-accent/90 text-[#0B1120] font-semibold px-4 py-2 rounded text-xs transition-colors self-start md:self-auto"
+            className="whitespace-nowrap bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold px-4 py-2 rounded text-xs transition-colors self-start md:self-auto"
           >
-            {getGitHubToken() ? 'Manage Token' : 'Authenticate GitHub Token'}
+            Vercel PAT Setup Guide
           </button>
         </div>
 
@@ -559,49 +546,39 @@ export default function KnowledgeAdmin() {
         </div>
       </main>
 
-      {/* GitHub Token Modal */}
+      {/* GitHub / Vercel Setup Modal */}
       {showGitHubModal && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white w-full max-w-xl rounded shadow-2xl overflow-hidden">
             <div className="bg-[#0B1120] text-white px-6 py-4 flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <Key className="w-5 h-5 text-accent" />
-                <h2 className="font-heading text-lg font-bold">GitHub Auto-Commit Setup</h2>
+                <Server className="w-5 h-5 text-emerald-400" />
+                <h2 className="font-heading text-lg font-bold">Vercel Auto-Commit Setup Guide</h2>
               </div>
               <button onClick={() => setShowGitHubModal(false)} className="text-white/60 hover:text-white">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveToken} className="p-6 space-y-4">
-              <div className="bg-blue-50 border border-blue-200 rounded p-4 text-xs text-blue-900 leading-relaxed space-y-2">
-                <strong className="block text-sm text-blue-950">How Secure Token Authentication Works:</strong>
-                <p>• Token is kept strictly in browser memory (`sessionStorage`) for your current session.</p>
-                <p>• <strong>Never hardcoded into website files, commits, or client bundles.</strong></p>
-                <p>• Uses GitHub's official REST API to push direct commits to <code className="bg-blue-100 px-1 py-0.5 rounded text-blue-950 font-mono">VaibhavRK/ca-website</code>.</p>
+            <div className="p-6 space-y-4 text-xs text-slate-700">
+              <div className="bg-emerald-50 border border-emerald-200 rounded p-4 text-emerald-950 leading-relaxed space-y-2">
+                <strong className="block text-sm font-semibold text-emerald-900">How to Enable Automatic Commits via Vercel (100% Safe):</strong>
+                <p>1. Go to your <strong>Vercel Dashboard &gt; Project Settings &gt; Environment Variables</strong>.</p>
+                <p>2. Add Key: <code className="bg-emerald-100 px-1 py-0.5 rounded font-mono font-bold text-emerald-950">GITHUB_PAT</code></p>
+                <p>3. Value: Paste your GitHub Personal Access Token (PAT) with repository content write access to <code className="bg-emerald-100 px-1 py-0.5 rounded font-mono font-bold text-emerald-950">VaibhavRK/ca-website</code>.</p>
+                <p>4. Save and redeploy on Vercel!</p>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
-                  GitHub Personal Access Token (PAT)
-                </label>
+              <div className="bg-slate-50 p-4 rounded border border-slate-200 leading-relaxed space-y-2">
+                <strong className="text-slate-900 block text-sm font-semibold">Optional Session Fallback PAT:</strong>
+                <p className="text-slate-600">If you are running locally on localhost or Vercel env variable is not set yet, enter token for this browser session:</p>
                 <input 
                   type="password"
                   value={gitHubToken}
                   onChange={(e) => setGitHubTokenState(e.target.value)}
                   placeholder="github_pat_... or ghp_..."
-                  className="w-full px-4 py-2.5 border border-slate-300 rounded text-sm text-slate-900 focus:outline-none focus:border-accent font-mono"
+                  className="w-full px-4 py-2 border border-slate-300 rounded text-xs text-slate-900 focus:outline-none focus:border-accent font-mono"
                 />
-              </div>
-
-              <div className="text-xs text-slate-500 leading-relaxed bg-slate-50 p-3.5 rounded border border-slate-200">
-                <strong className="text-slate-700 block mb-1">Creating a Scoped Fine-Grained Token (1 Minute):</strong>
-                <ol className="list-decimal pl-4 space-y-1">
-                  <li>Go to <strong>GitHub.com &gt; Settings &gt; Developer Settings &gt; Personal Access Tokens &gt; Fine-grained tokens</strong>.</li>
-                  <li>Set Repository Access to <strong>"Only select repositories"</strong> and select <strong>ca-website</strong>.</li>
-                  <li>Under Repository Permissions, grant <strong>Contents: Read and write</strong>.</li>
-                  <li>Copy and paste the generated token above.</li>
-                </ol>
               </div>
 
               <div className="pt-3 border-t border-slate-200 flex justify-end gap-3">
@@ -610,18 +587,19 @@ export default function KnowledgeAdmin() {
                   onClick={() => setShowGitHubModal(false)}
                   className="px-4 py-2 bg-white border border-slate-300 text-slate-700 text-xs font-medium rounded hover:bg-slate-50 transition-colors"
                 >
-                  Cancel
+                  Close
                 </button>
                 <button 
-                  type="submit" 
+                  type="button"
+                  onClick={handleSaveToken} 
                   disabled={isSyncing}
                   className="px-5 py-2 bg-[#0B1120] text-white hover:bg-accent hover:text-[#0B1120] text-xs font-semibold rounded transition-colors flex items-center gap-2 disabled:opacity-50"
                 >
-                  {isSyncing ? <Loader2 className="w-4 h-4 animate-spin text-accent" /> : <ShieldCheck className="w-4 h-4" />}
-                  <span>Save &amp; Test Connection</span>
+                  {isSyncing ? <Loader2 className="w-4 h-4 animate-spin text-accent" /> : <ShieldCheck className="w-4 h-4 text-emerald-400" />}
+                  <span>Test Session Token</span>
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}

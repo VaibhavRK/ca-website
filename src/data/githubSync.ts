@@ -9,7 +9,6 @@ const GITHUB_TOKEN_KEY = 'dsco_github_pat_session';
 
 /**
  * Save GitHub Personal Access Token to sessionStorage (cleared when browser closes).
- * NEVER saved in localStorage, codebase, or environment variables.
  */
 export function saveGitHubToken(token: string): void {
   sessionStorage.setItem(GITHUB_TOKEN_KEY, token.trim());
@@ -30,18 +29,53 @@ export function clearGitHubToken(): void {
 }
 
 /**
- * Commit updated knowledgeData.json directly to GitHub repository via GitHub REST API.
+ * Commit updated knowledgeData.json directly to GitHub repository.
+ * 1. Tries Vercel Serverless API first (/api/commit-knowledge) using Vercel GITHUB_PAT env variable.
+ * 2. If Vercel env variable is not set, falls back to direct browser session PAT token.
  */
 export async function commitKnowledgeToGitHub(
   items: KnowledgeItem[],
   providedToken?: string
-): Promise<{ success: boolean; message: string }> {
+): Promise<{ success: boolean; message: string; method?: 'vercel' | 'pat' }> {
+
+  // Strategy 1: Attempt Vercel Serverless Function backend commit first
+  try {
+    const vercelRes = await fetch('/api/commit-knowledge', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ items })
+    });
+
+    // If Vercel serverless function responded cleanly (200 OK)
+    if (vercelRes.ok) {
+      const data = await vercelRes.json();
+      return {
+        success: true,
+        message: data.message || 'Auto-committed to GitHub via Vercel Backend environment variable!',
+        method: 'vercel'
+      };
+    }
+
+    // If serverless endpoint exists but env variable GITHUB_PAT is missing on Vercel
+    if (vercelRes.status === 500) {
+      const errData = await vercelRes.json().catch(() => ({}));
+      if (errData.message && errData.message.includes('GITHUB_PAT')) {
+        // Fallthrough to Session PAT or prompt setup guide
+      }
+    }
+  } catch (e) {
+    // Local dev or non-Vercel environment fallback
+  }
+
+  // Strategy 2: Fallback to session PAT Token (if entered by admin)
   const token = providedToken || getGitHubToken();
 
   if (!token) {
     return {
       success: false,
-      message: 'GitHub Personal Access Token is missing. Please enter your GitHub token in Sync Settings.'
+      message: 'Vercel GITHUB_PAT env variable is not set, and no Session PAT token was provided.'
     };
   }
 
@@ -49,7 +83,6 @@ export async function commitKnowledgeToGitHub(
   const formattedJson = JSON.stringify(items, null, 2);
 
   try {
-    // Step 1: Fetch current file SHA from GitHub repository
     const getResponse = await fetch(`${apiUrl}?ref=${BRANCH}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -61,17 +94,13 @@ export async function commitKnowledgeToGitHub(
       if (getResponse.status === 401) {
         return { success: false, message: 'Invalid GitHub Token or authorization expired.' };
       }
-      if (getResponse.status === 404) {
-        return { success: false, message: `File not found on repository branch ${BRANCH}.` };
-      }
       const errText = await getResponse.text();
-      return { success: false, message: `Failed to fetch file SHA: ${errText}` };
+      return { success: false, message: `Failed to fetch file info: ${errText}` };
     }
 
     const fileData = await getResponse.json();
     const currentSha = fileData.sha;
 
-    // Step 2: Encode contents to Base64 (supporting Unicode)
     const encoder = new TextEncoder();
     const dataUint8 = encoder.encode(formattedJson);
     let binaryString = '';
@@ -80,7 +109,6 @@ export async function commitKnowledgeToGitHub(
     }
     const base64Content = btoa(binaryString);
 
-    // Step 3: Send PUT request to create a direct commit on GitHub repository
     const putResponse = await fetch(apiUrl, {
       method: 'PUT',
       headers: {
@@ -97,13 +125,13 @@ export async function commitKnowledgeToGitHub(
     });
 
     if (putResponse.ok) {
-      // Store valid token in session if provided explicitly
       if (providedToken) {
         saveGitHubToken(providedToken);
       }
       return {
         success: true,
-        message: 'Successfully committed knowledge updates directly to GitHub! Your site will auto-redeploy.'
+        message: 'Successfully committed changes to GitHub repository!',
+        method: 'pat'
       };
     } else {
       const errorJson = await putResponse.json().catch(() => ({}));
