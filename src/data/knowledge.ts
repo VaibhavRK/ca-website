@@ -19,20 +19,19 @@ const defaultSeedData: KnowledgeItem[] = seedItems as KnowledgeItem[];
 
 /**
  * Retrieves all knowledge items from localStorage.
- * If local storage is uninitialized or empty, populates it from knowledgeData.json.
+ * Defaults to [] from knowledgeData.json.
  */
 export function getKnowledgeItems(): KnowledgeItem[] {
   try {
     const rawData = localStorage.getItem(STORAGE_KEY);
-    if (!rawData) {
+    if (rawData === null) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSeedData));
       return defaultSeedData;
     }
     const parsed = JSON.parse(rawData);
-    if (Array.isArray(parsed) && parsed.length > 0) {
+    if (Array.isArray(parsed)) {
       return parsed;
     }
-    // Fallback if empty or invalid
     localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSeedData));
     return defaultSeedData;
   } catch (error) {
