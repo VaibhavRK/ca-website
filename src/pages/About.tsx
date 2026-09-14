@@ -34,51 +34,33 @@ const About: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-primary mb-6">
-                Company Overview
+                Firm Overview
               </h2>
               <p className="font-body text-text-secondary mb-4 leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Devansh Singhal & Company is a firm of Chartered Accountants providing professional services with a core focus on taxation. Our practice spans advisory, compliance, dispute resolution and litigation across direct and indirect tax laws, with an emphasis on addressing complex and evolving tax and regulatory issues.
+              </p>
+              <p className="font-body text-text-secondary mb-4 leading-relaxed">
+                We work with businesses, entrepreneurs and individuals at different stages of their growth, assisting them in understanding their obligations, evaluating tax positions, managing regulatory risks and resolving disputes. Our approach is founded on a detailed understanding of the law, continuous engagement with judicial and regulatory developments, and an appreciation of the commercial context in which our clients operate.
+              </p>
+              <p className="font-body text-text-secondary mb-4 leading-relaxed">
+                While taxation remains at the heart of our practice, our capabilities extend to audit and assurance, regulatory advisory and other allied professional services, allowing us to provide clients with coordinated support across their broader financial and regulatory requirements.
               </p>
               <p className="font-body text-text-secondary leading-relaxed">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                We believe professional advice should be clear, technically sound and practically implementable. Whether advising on a transaction, representing a client in a dispute or undertaking an assurance engagement, our focus remains on understanding the issue in depth and delivering considered solutions with integrity and professional independence.
               </p>
             </div>
             <div className="bg-bg-alt p-8 md:p-12 border-l-4 border-accent h-full flex flex-col justify-center rounded-sm">
               <h3 className="text-xl font-heading font-semibold text-primary mb-4">
-                A Legacy of Trust
+                Our Approach
               </h3>
               <p className="font-body text-text-secondary italic">
-                "Our commitment to excellence and integrity has made us a trusted partner for businesses and individuals alike since our inception."
+                “We combine technical depth with commercial understanding to provide advice that is clear, considered and practical. Every engagement is approached with professional independence, attention to detail and a commitment to understanding the client’s objectives before recommending a course of action.”
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. Our History */}
-      <section className="py-16 md:py-24 bg-bg-alt">
-        <div className="section-container">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-center text-primary mb-12">
-            Our History
-          </h2>
-          <div className="max-w-3xl mx-auto relative border-l-2 border-accent pl-8 md:pl-12 space-y-12">
-            {[
-              { year: '1995', title: 'Foundation', desc: 'Established with a vision to provide premium tax and audit services.' },
-              { year: '2005', title: 'Expansion', desc: 'Opened our second office and expanded our corporate advisory practice.' },
-              { year: '2015', title: 'Digital Transformation', desc: 'Embraced modern accounting technologies to better serve our global clients.' },
-              { year: '2023', title: 'Industry Leaders', desc: 'Recognized as one of the premier chartered accounting firms in the region.' }
-            ].map((milestone, idx) => (
-              <div key={idx} className="relative">
-                {/* Gold Accent Dot */}
-                <span className="absolute -left-[41px] md:-left-[57px] top-1 w-5 h-5 bg-white border-4 border-accent rounded-full"></span>
-                <span className="text-accent font-heading font-bold text-xl block mb-2">{milestone.year}</span>
-                <h3 className="text-2xl font-heading font-semibold text-primary mb-2">{milestone.title}</h3>
-                <p className="font-body text-text-secondary">{milestone.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* 3. Mission & Vision */}
       <section className="py-16 md:py-24 bg-white">
@@ -91,7 +73,7 @@ const About: React.FC = () => {
               </div>
               <h2 className="text-2xl font-heading font-bold text-primary mb-4">Our Mission</h2>
               <p className="font-body text-text-secondary leading-relaxed">
-                To deliver exceptional financial and strategic advice that empowers our clients to achieve their goals, while upholding the highest standards of professional integrity.
+                To deliver technically sound, practical and solution-oriented tax and professional services, enabling our clients to navigate complexity, manage risks and make informed decisions with confidence and integrity.
               </p>
             </div>
             
@@ -102,84 +84,14 @@ const About: React.FC = () => {
               </div>
               <h2 className="text-2xl font-heading font-bold text-primary mb-4">Our Vision</h2>
               <p className="font-body text-text-secondary leading-relaxed">
-                To be the most respected and trusted chartered accounting firm, known for our innovative solutions, unwavering commitment to clients, and fostering top talent.
+                To build a trusted professional firm recognised for its expertise in taxation, quality of representation and commitment to delivering meaningful value to clients, while consistently upholding the highest standards of professional excellence and integrity.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. Core Values */}
-      <section className="py-16 md:py-24 bg-bg-alt">
-        <div className="section-container">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-center text-primary mb-12">
-            Core Values
-          </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { icon: ShieldCheck, title: 'Integrity', desc: 'Upholding honesty and strong moral principles in all our dealings.' },
-              { icon: Award, title: 'Excellence', desc: 'Striving for the highest quality in every service we provide.' },
-              { icon: Users, title: 'Client Focus', desc: 'Putting our clients\' needs and success at the center of our work.' },
-              { icon: Lightbulb, title: 'Innovation', desc: 'Embracing new ideas and technologies to deliver better solutions.' },
-              { icon: Handshake, title: 'Collaboration', desc: 'Working together seamlessly to achieve outstanding results.' },
-              { icon: Scale, title: 'Accountability', desc: 'Taking full responsibility for our actions and their outcomes.' }
-            ].map((value, idx) => (
-              <div key={idx} className="bg-white p-6 border border-border rounded-sm">
-                <value.icon className="w-8 h-8 text-accent mb-4" />
-                <h3 className="text-xl font-heading font-semibold text-primary mb-2">{value.title}</h3>
-                <p className="font-body text-text-secondary text-sm">{value.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* 5. Why Choose Us */}
-      <section className="py-16 md:py-24 bg-white">
-        <div className="section-container">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-center text-primary mb-12">
-            Why Choose Us
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { num: '01', title: 'Expertise & Experience', desc: 'Decades of combined experience handling complex financial matters for diverse industries.' },
-              { num: '02', title: 'Tailored Solutions', desc: 'We do not believe in one-size-fits-all. Every strategy is customized to your unique needs.' },
-              { num: '03', title: 'Proactive Approach', desc: 'We anticipate challenges and opportunities, keeping you steps ahead of the curve.' }
-            ].map((reason, idx) => (
-              <div key={idx} className="relative p-6 border border-border rounded-sm">
-                <span className="absolute top-2 right-4 text-5xl font-heading font-bold text-accent/20">
-                  {reason.num}
-                </span>
-                <h3 className="text-xl font-heading font-semibold text-primary mb-3 mt-4 relative z-10">
-                  {reason.title}
-                </h3>
-                <p className="font-body text-text-secondary relative z-10">
-                  {reason.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Contact CTA */}
-      <section className="py-16 md:py-24 bg-primary text-center">
-        <div className="section-container">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-6">
-            Ready to Discuss Your Financial Future?
-          </h2>
-          <p className="font-body text-white/80 mb-8 max-w-2xl mx-auto">
-            Schedule a consultation with our experts to find out how we can help you achieve your business and personal financial goals.
-          </p>
-          <Link 
-            to="/contact" 
-            className="group bg-accent text-primary px-10 py-4 font-medium hover:bg-white hover:-translate-y-1 transform transition-all duration-300 inline-flex items-center gap-2 rounded-sm shadow-md hover:shadow-lg"
-          >
-            Contact Us Today
-            <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
-        </div>
-      </section>
     </main>
   );
 };

@@ -48,29 +48,6 @@ const Footer = () => {
 
   return (
     <div className="w-full shrink-0">
-      {/* ═══════════════════════════════════════════════
-          CTA BAND — "Ready to Get Started?"
-          ═══════════════════════════════════════════════ */}
-      <section className="relative bg-gradient-to-b from-[#0F1A2E] to-[#0B1120] py-16 md:py-20">
-        {/* Gold accent line at top */}
-        <div className="absolute top-0 left-0 w-full h-[2px] bg-accent/60" />
-
-        <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16 text-center">
-          <h2 className="font-heading text-[26px] md:text-[32px] text-white font-bold mb-3 tracking-tight">
-            Ready to Get Started?
-          </h2>
-          <p className="text-[#8B9DB6] text-[15px] leading-relaxed mb-8 max-w-xl mx-auto">
-            Join thousands of users who are already building amazing things with us.
-          </p>
-          <Link
-            to="/contact"
-            className="group inline-flex items-center gap-2 border-2 border-accent text-accent px-7 py-2.5 font-semibold text-sm rounded-md hover:bg-accent hover:text-[#0B1120] transition-all duration-200"
-          >
-            Get Started
-            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-          </Link>
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════════
           FOOTER

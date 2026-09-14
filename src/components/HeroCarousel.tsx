@@ -4,26 +4,26 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const slides = [
   {
     id: 1,
-    quote: "Excellence is not an act, but a habit.",
+    quote: "Quality is not an act, it is a habit.",
     author: "Aristotle",
     image: "/images/hero/slide1.png"
   },
   {
     id: 2,
-    quote: "Integrity is the foundation of every lasting relationship.",
-    author: "Professional Values",
+    quote: "It takes 20 years to build a reputation and five minutes to ruin it.",
+    author: "Warren Buffett",
     image: "/images/hero/slide2.png"
   },
   {
     id: 3,
-    quote: "Great businesses are built on informed decisions.",
-    author: "Business Insight",
+    quote: "An investment in knowledge pays the best interest.",
+    author: "Benjamin Franklin",
     image: "/images/hero/slide3.png"
   },
   {
     id: 4,
-    quote: "Knowledge transforms challenges into opportunities.",
-    author: "Corporate Perspective",
+    quote: "The price of greatness is responsibility.",
+    author: "Winston Churchill",
     image: "/images/hero/slide4.png"
   }
 ];

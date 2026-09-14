@@ -10,99 +10,11 @@ export interface KnowledgeItem {
 
 const STORAGE_KEY = 'dsco_knowledge_items';
 
-const seedData: KnowledgeItem[] = [
-  {
-    id: 'news-1',
-    title: 'Regulatory Update: Key Changes in Compliance Requirements',
-    category: 'news',
-    date: '2025-09-01',
-    description:
-      'An overview of the latest regulatory changes that impact businesses and their compliance obligations for the current financial year.',
-  },
-  {
-    id: 'news-2',
-    title: 'Firm Recognized Among Top Professional Services Firms',
-    category: 'news',
-    date: '2025-08-15',
-    description:
-      'We are proud to announce our recognition as one of the leading professional services firms in the region, reflecting our commitment to excellence.',
-  },
-  {
-    id: 'news-3',
-    title: 'New Office Inauguration in Mumbai',
-    category: 'news',
-    date: '2025-07-20',
-    description:
-      'Expanding our geographic presence, we are delighted to announce the opening of our new office in Mumbai to better serve our clients.',
-  },
-  {
-    id: 'article-1',
-    title: 'Understanding the Impact of Digital Transformation on Financial Reporting',
-    category: 'article',
-    date: '2025-08-28',
-    description:
-      'This article explores how digital transformation is reshaping financial reporting practices and what businesses need to prepare for.',
-    pdfUrl: '/documents/article-01.pdf',
-  },
-  {
-    id: 'article-2',
-    title: 'Best Practices in Corporate Governance for Growing Businesses',
-    category: 'article',
-    date: '2025-08-10',
-    description:
-      'A comprehensive guide to implementing robust corporate governance frameworks that support sustainable business growth.',
-    pdfUrl: '/documents/article-02.pdf',
-  },
-  {
-    id: 'article-3',
-    title: 'Navigating Cross-Border Transactions: A Professional Guide',
-    category: 'article',
-    date: '2025-07-25',
-    description:
-      'Expert insights on managing the complexities of cross-border transactions, including regulatory, tax, and operational considerations.',
-    pdfUrl: '/documents/article-03.pdf',
-  },
-  {
-    id: 'pub-1',
-    title: 'Annual Industry Report 2025: Trends and Outlook',
-    category: 'publication',
-    date: '2025-09-05',
-    description:
-      'Our flagship annual report analyzing key industry trends, economic indicators, and the outlook for businesses in the coming year.',
-    pdfUrl: '/documents/report-01.pdf',
-  },
-  {
-    id: 'pub-2',
-    title: 'Tax Planning Guide for Financial Year 2025-26',
-    category: 'publication',
-    date: '2025-08-01',
-    description:
-      'A practical guide covering key tax planning strategies, deductions, and compliance deadlines for the current financial year.',
-    pdfUrl: '/documents/report-02.pdf',
-  },
-  {
-    id: 'pub-3',
-    title: 'Business Compliance Handbook: Essential Checklist',
-    category: 'publication',
-    date: '2025-07-01',
-    description:
-      'A comprehensive compliance handbook providing essential checklists and guidelines for businesses to maintain regulatory compliance.',
-    pdfUrl: '/documents/report-03.pdf',
-  },
-];
+const seedData: KnowledgeItem[] = [];
 
 function initStorage(): KnowledgeItem[] {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    try {
-      return JSON.parse(stored) as KnowledgeItem[];
-    } catch {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(seedData));
-      return [...seedData];
-    }
-  }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(seedData));
-  return [...seedData];
+  localStorage.removeItem(STORAGE_KEY);
+  return [];
 }
 
 export function getKnowledgeItems(): KnowledgeItem[] {

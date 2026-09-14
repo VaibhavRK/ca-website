@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getServiceBySlug } from '../data/services';
+import { getServiceBySlug, services } from '../data/services';
 import PageHero from '../components/PageHero';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 
@@ -119,22 +119,23 @@ const ServiceDetail: React.FC = () => {
                 </Link>
               </div>
 
-              {/* Benefits */}
-              <div className="border border-border p-6">
-                <h3 className="font-heading text-lg text-primary mb-5 pb-4 border-b border-border">
-                  Key Benefits
-                </h3>
-                <ul className="space-y-4">
-                  {service.benefits.map((benefit, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-2" />
-                      <span className="text-text-secondary font-body text-sm leading-relaxed">
-                        {benefit}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                {service.benefits && service.benefits.length > 0 && (
+                  <div className="border border-border p-6 mt-8">
+                    <h3 className="font-heading text-lg text-primary mb-5 pb-4 border-b border-border">
+                      Key Benefits
+                    </h3>
+                    <ul className="space-y-4">
+                      {service.benefits.map((benefit, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-2" />
+                          <span className="text-text-secondary font-body text-sm leading-relaxed">
+                            {benefit}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
               {/* Other Services */}
               <div className="border border-border p-6">
@@ -142,14 +143,7 @@ const ServiceDetail: React.FC = () => {
                   Other Services
                 </h3>
                 <ul className="space-y-1">
-                  {[
-                    { name: 'Audit & Assurance', slug: 'service-one' },
-                    { name: 'Taxation Advisory', slug: 'service-two' },
-                    { name: 'Regulatory & Compliance', slug: 'service-three' },
-                    { name: 'Business Advisory', slug: 'service-four' },
-                    { name: 'Accounting & Outsourcing', slug: 'service-five' },
-                    { name: 'Technology Advisory', slug: 'service-six' },
-                  ]
+                  {services
                     .filter((s) => s.slug !== slug)
                     .map((s) => (
                       <li key={s.slug}>

@@ -33,13 +33,13 @@ const Home: React.FC = () => {
                 About Our Firm
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-semibold text-primary mb-6">
-                A Legacy of Trust & Professional Excellence
+                Built on Expertise, Integrity & Commitment
               </h2>
               <p className="text-text-secondary leading-relaxed mb-4">
-                Established with a vision to provide premium professional services, Devansh Singhal & Company is a leading firm of Chartered Accountants. We bring a blend of traditional values and modern methodologies to help our clients navigate complex business landscapes.
+                Devansh Singhal & Company is a firm of Chartered Accountants with a core focus on taxation, including advisory, compliance, dispute resolution and litigation across direct and indirect tax laws. We assist businesses and individuals in navigating complex tax and regulatory matters through technically sound advice and a practical, solution-oriented approach.
               </p>
               <p className="text-text-secondary leading-relaxed mb-8">
-                Our commitment to quality, integrity, and client satisfaction has made us a trusted partner for businesses across diverse sectors.
+                Our tax practice is complemented by audit and assurance, regulatory and allied professional services. Across every engagement, we remain guided by professional integrity, attention to detail and a commitment to delivering clear and effective solutions to our clients.
               </p>
               <Link 
                 to="/about"
@@ -63,77 +63,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. Services Section */}
-      <section className="py-16 md:py-24 bg-bg-alt">
-        <div className="section-container">
-          <SectionHeader 
-            title="Our Services" 
-            subtitle="Comprehensive professional services tailored to meet the evolving needs of modern businesses."
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {services.slice(0, 6).map(service => (
-              <ServiceCard key={service.id} service={service} />
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Link 
-              to="/services"
-              className="group bg-primary text-white px-8 py-3.5 hover:bg-accent hover:-translate-y-1 transform transition-all duration-300 font-medium inline-flex items-center gap-2 rounded-sm shadow-sm hover:shadow-md"
-            >
-              View All Services
-              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
-          </div>
-        </div>
-      </section>
 
-      {/* 4. Leadership Preview */}
-      <section className="py-16 md:py-24 bg-white">
-        <div className="section-container">
-          <SectionHeader 
-            title="Our Leadership" 
-            subtitle="Experienced professionals dedicated to delivering excellence."
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {topLeadership.map(member => (
-              <LeadershipCard key={member.id} member={member} />
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Link 
-              to="/leadership"
-              className="group bg-primary text-white px-8 py-3.5 hover:bg-accent hover:-translate-y-1 transform transition-all duration-300 font-medium inline-flex items-center gap-2 rounded-sm shadow-sm hover:shadow-md"
-            >
-              Meet Our Full Team
-              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Knowledge Preview */}
-      <section className="py-16 md:py-24 bg-bg-alt">
-        <div className="section-container">
-          <SectionHeader 
-            title="Latest Knowledge" 
-            subtitle="Stay informed with our latest insights, news, and publications."
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {latestKnowledge.map(item => (
-              <KnowledgeCard key={item.id} item={item} />
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Link 
-              to="/knowledge"
-              className="group bg-primary text-white px-8 py-3.5 hover:bg-accent hover:-translate-y-1 transform transition-all duration-300 font-medium inline-flex items-center gap-2 rounded-sm shadow-sm hover:shadow-md"
-            >
-              Explore All Resources
-              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
-          </div>
-        </div>
-      </section>
 
 
     </div>
